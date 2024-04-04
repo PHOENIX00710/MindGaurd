@@ -9,6 +9,7 @@ export const psychCentralScraper = async (req, res) => {
     for (let category of types) {
         console.log(category);
         await page.goto(`https://psychcentral.com/${category}`);
+        await page.waitForSelector('.css-10vopkp', {visible: true});
         try {
             let articles = await page.evaluate((category) => {
                 return Array.from(document.querySelectorAll('.css-8sm3l3'), e => {

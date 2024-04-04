@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer";
+import articleModel from "../models/articleSchema.js";
 
 export const veryWellMindScraper = async (req, res) => {
     const browser = await puppeteer.launch({ headless: true });
@@ -9,13 +10,24 @@ export const veryWellMindScraper = async (req, res) => {
         await page.goto(`https://www.verywellmind.com/${category}`);
         try {
             let articles = await page.evaluate((category) => {
-                return Array.from(document.querySelectorAll('.mntl-card-list-items'), e => {
+                return Array.from(document.querySelectorAll('.mntl-card-list-items'), async (e) => {
                     const title = e.querySelector('.card__byline')?.getAttribute('data-byline') || 'No title';
                     const content = e.querySelector('.card__title-text')?.textContent || 'No content';
-                    const link = e?.href || 'No link'; // Ensure you're selecting an anchor element for the link.
-                    const img = e.querySelector('.card__img')?.getAttribute('data-src') || 'https://media.gettyimages.com/id/632495542/photo/las-vegas-nv-adult-film-actress-lana-rhoades-attends-the-2017-adult-video-news-awards-at-the.jpg?s=612x612&w=gi&k=20&c=j9toULaCbKoc92QIfrZ2tyOfuxgzVAXoChceawOMWN0=';
+                    const link = e?.href || 'https://www.verywellmind.com/'; // Ensure you're selecting an anchor element for the link.
+                    const img = e.querySelector('.card__img')?.getAttribute('data-src') || 'https://media.istockphoto.com/id/1337766466/photo/man-suffering-depression-and-feeling-negative-emotions.jpg?s=612x612&w=0&k=20&c=6XL3vxDQ-8v5zgVaGqvafNl8cFGT4SCm2lki4rXawYc=';
                     const categoryName = category.split('-')[0]; // Use a different variable name if needed.
+                    if (title !== 'No title' && content !== 'No content') {
+                        const newArticle = new articleModel({
+                            title: title.trim(),
+                            overview: content.trim(),
+                            link,
+                            image: img,
+                            category
+                        })
+                        await newArticle.save()
+                    }
                     return { title, content, link, img, category: categoryName };
+
                 });
             }, category); // Pass the category variable correctly.
             console.log(articles);

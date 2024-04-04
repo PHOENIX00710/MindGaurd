@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import React, { useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { LuShieldClose } from "react-icons/lu";
@@ -109,8 +109,8 @@ function Dass() {
   const [currIndex, setCurrIndex] = useState(0);
   const [isFirstQuestion, setIsFirstQuestion] = useState(false);
   const [isLastQuestion, setIsLastQuestion] = useState(false);
-  const [computing, setComputing] = useState(false);
   const [answers, setAnswers] = useState({});
+  const [error, setError] = useState(null);
 
   const handleCloseModal = (e) => {
     setOpenModal(false);
@@ -118,6 +118,9 @@ function Dass() {
   };
 
   const increaseCount = (e) => {
+    setError(null);
+    if (answers[currIndex] === undefined)
+      return setError("You need to select one option atleast");
     if (currIndex == questions.length - 1) {
       setIsLastQuestion(true);
       return;
@@ -127,13 +130,19 @@ function Dass() {
   };
 
   const decreaseCount = (e) => {
+    setError(null);
+    if (answers[currIndex] === undefined)
+      return setError("You need to select one option atleast");
     if (currIndex == 0) {
       setIsFirstQuestion(true);
       return;
     } else {
+      if (currIndex == questions.length - 1) setIsLastQuestion(false);
       setCurrIndex((prevCount) => prevCount - 1);
     }
   };
+
+  const submitQuiz = () => {};
 
   return (
     <>
@@ -257,7 +266,17 @@ function Dass() {
               onClick={increaseCount}
             />
           </div>
+          {isLastQuestion && (
+            <Button onClick={submitQuiz} variant="contained" color="primary">
+              Submit
+            </Button>
+          )}
         </main>
+        {error && (
+          <Alert severity="error" variant="standard">
+            {error}
+          </Alert>
+        )}
       </div>
     </>
   );
