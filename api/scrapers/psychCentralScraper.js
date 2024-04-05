@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer";
+import articleModel from "../models/articleSchema.js";
 
 export const psychCentralScraper = async (req, res) => {
     const browser = await puppeteer.launch({ headless: true });
@@ -9,7 +10,7 @@ export const psychCentralScraper = async (req, res) => {
     for (let category of types) {
         console.log(category);
         await page.goto(`https://psychcentral.com/${category}`);
-        await page.waitForSelector('.css-10vopkp', {visible: true});
+        await page.waitForSelector('.css-10vopkp', { visible: true });
         try {
             let articles = await page.evaluate((category) => {
                 return Array.from(document.querySelectorAll('.css-8sm3l3'), e => {
@@ -20,13 +21,33 @@ export const psychCentralScraper = async (req, res) => {
                     return { title, content, link, img, category };
                 });
             }, category); // Note: Passing category as an argument to page.evaluate()
-            console.log(articles);
+            articles = articles.filter(a => a.content != 'No content' || a.title != 'No title');
+            for (let article of articles) {
+                try {
+                    const newArticle = new articleModel({
+                        title: article.title.trim(),
+                        overview: article.content.trim(),
+                        link: article.link,
+                        image: article.img,
+                        category: article.category
+                    })
+                    await newArticle.save()
+                    console.log(`Entry for ${article.title} added successfully`);
+                }
+                catch (error) {
+                    console.log(error)
+                    res.json(error).status(500)
+                }
+            }
         } catch (error) {
             console.log(error);
+            res.json(error).status(500)
         }
     }
 
     await browser.close();
+    res.json({
+        success: true,
+        message: "Articles added"
+    })
 };
-
-psychCentralScraper()

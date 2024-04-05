@@ -1,8 +1,11 @@
 import express from 'express'
-//import { anxietyHandler, depressionHandler } from '../controllers/article.controllers.js'
+import { veryWellMindScraper } from '../scrapers/veryWellMind.js'
+import { psychCentralScraper } from '../scrapers/psychCentralScraper.js'
+import { getAllArticles } from '../controllers/article.controllers.js'
 
 const router = express.Router()
-router.get("/depression", depressionHandler)
-router.get("/anxiety", anxietyHandler)
+router.post("/veryWellMind", veryWellMindScraper)
+router.post("/psychCentral", psychCentralScraper)
+router.get("/getArticles",getAllArticles)
 
 export default router

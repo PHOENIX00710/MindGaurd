@@ -1,6 +1,7 @@
 import puppeteer from "puppeteer";
 import articleModel from "../models/articleSchema.js";
 
+
 export const veryWellMindScraper = async (req, res) => {
     const browser = await puppeteer.launch({ headless: true });
 
@@ -10,27 +11,34 @@ export const veryWellMindScraper = async (req, res) => {
         await page.goto(`https://www.verywellmind.com/${category}`);
         try {
             let articles = await page.evaluate((category) => {
-                return Array.from(document.querySelectorAll('.mntl-card-list-items'), async (e) => {
+                return Array.from(document.querySelectorAll('.mntl-card-list-items'), (e) => {
                     const title = e.querySelector('.card__byline')?.getAttribute('data-byline') || 'No title';
                     const content = e.querySelector('.card__title-text')?.textContent || 'No content';
                     const link = e?.href || 'https://www.verywellmind.com/'; // Ensure you're selecting an anchor element for the link.
                     const img = e.querySelector('.card__img')?.getAttribute('data-src') || 'https://media.istockphoto.com/id/1337766466/photo/man-suffering-depression-and-feeling-negative-emotions.jpg?s=612x612&w=0&k=20&c=6XL3vxDQ-8v5zgVaGqvafNl8cFGT4SCm2lki4rXawYc=';
                     const categoryName = category.split('-')[0]; // Use a different variable name if needed.
-                    if (title !== 'No title' && content !== 'No content') {
-                        const newArticle = new articleModel({
-                            title: title.trim(),
-                            overview: content.trim(),
-                            link,
-                            image: img,
-                            category
-                        })
-                        await newArticle.save()
-                    }
                     return { title, content, link, img, category: categoryName };
 
                 });
             }, category); // Pass the category variable correctly.
-            console.log(articles);
+            articles = articles.filter(a => a.content != 'No content' || a.title != 'No title');
+            for (let article of articles) {
+                try {
+                    const newArticle = new articleModel({
+                        title: article.title.trim(),
+                        overview: article.content.trim(),
+                        link: article.link,
+                        image: article.img,
+                        category: article.category
+                    })
+                    await newArticle.save()
+                    console.log(`Entry for ${article.title} added successfully`);
+                }
+                catch (error) {
+                    console.log(error)
+                    res.json(error).status(500)
+                }
+            }
             await page.close(); // Close the page after each iteration.
         }
         catch (e) {
@@ -38,7 +46,9 @@ export const veryWellMindScraper = async (req, res) => {
         }
     }
     await browser.close(); // Close the browser after processing all categories.
+    res.json({
+        success: true,
+        message: "Articles added"
+    })
 };
 
-
-veryWellMindScraper()
