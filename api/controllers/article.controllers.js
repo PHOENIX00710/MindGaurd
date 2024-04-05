@@ -1,9 +1,9 @@
 import articleModel from "../models/articleSchema.js"
 
 export const getAllArticles = async (req, res, next) => {
-    const start = parseInt(req.query.start) || 0; // Ensure 'start' is an integer
-    const limit = parseInt(req.query.limit) || 12; // Ensure 'limit' is an integer
-    const sortDirection = req.query.sortBy === "asc" ? 1 : -1; // Convert to MongoDB sort format
+    const start = parseInt(req.query.start) || 0; 
+    const limit = parseInt(req.query.limit) || 12; 
+    const sortDirection = req.query.sortBy === "asc" ? 1 : -1; 
 
     // Starting with an empty match stage to apply conditional filtering
     let matchStage = {};
@@ -22,7 +22,7 @@ export const getAllArticles = async (req, res, next) => {
     try {
         const articles = await articleModel.aggregate([
             { $match: matchStage },
-            { $sample: { size: limit + start } }, // Increase sample size to account for skip
+            { $sample: { size: limit + start } },
             { $sort: { updatedAt: sortDirection } },
         ]).then(result => result.slice(start, start + limit)); // Manually apply 'skip' logic
 
