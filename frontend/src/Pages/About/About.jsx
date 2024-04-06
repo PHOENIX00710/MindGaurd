@@ -4,10 +4,13 @@ import { animate, motion } from "framer-motion";
 import "./about.css";
 import { useNavigate } from "react-router-dom";
 
-function About() {
+function About(props) {
+  const openNavbar = props.open;
   const finalTitle = "Guard";
   const [visibleTitle, setVisibleTitle] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {}, [openNavbar]);
 
   useEffect(() => {
     let currIndex = 0;
@@ -35,9 +38,13 @@ function About() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col-reverse gap-6 md:flex-row items-center md:justify-around">
-      <article className="flex flex-col gap-4 w-2/3 md:w-1/2">
-        <h1 className="text-4xl md:text-7xl roboto-bold ">
+    <main
+      className={`${
+        openNavbar ? "opacity-45" : "opacity-100"
+      } min-h-screen flex flex-col-reverse gap-6 lg:flex-row items-center justify-center lg:justify-around`}
+    >
+      <article className="flex flex-col gap-4 w-2/3 lg:w-1/2">
+        <h1 className="text-4xl lg:text-7xl roboto-bold ">
           Mind<span className="text-blue-2">{visibleTitle}</span>
         </h1>
         <motion.p
@@ -67,7 +74,7 @@ function About() {
       >
         <section
           id="image"
-          className="w-48 h-48 md:h-96 md:w-96 rounded-full shadow-main-svg overflow-hidden"
+          className="w-48 h-48 md:h-72 md:w-72 lg:h-96 lg:w-96 rounded-full shadow-main-svg overflow-hidden"
         >
           <img src={svg} alt="Main SVG" className="bg-cover bg-center" />
         </section>
