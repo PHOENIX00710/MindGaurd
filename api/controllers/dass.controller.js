@@ -1,11 +1,13 @@
 import dassModel from "../models/dassSchema.js";
 
-export const dassHanlder = (req, res) => {
+export const dassHanlder = async (req, res, next) => {
     let { depression_score, anxiety_score, stress_score } = req.body;
     depression_score = parseInt(depression_score);
     anxiety_score = parseInt(anxiety_score);
     stress_score = parseInt(stress_score);
     let depression_label = "", anxiety_label = "", stress_label = ""
+
+    console.log("User\n", req.user);
 
     // Calculating Depression Label
     if (depression_score <= 9)
@@ -49,21 +51,24 @@ export const dassHanlder = (req, res) => {
     else
         stress_label = 'Uncategorized';
 
-    const newDass= new dassModel({
-        depression_label,
-        depression_score,
-        anxiety_label,
-        anxiety_score,
-        stress_label,
-        stress_score
-    })
+    try {
+        const newDass = new dassModel({
+            depression_label,
+            depression_score,
+            anxiety_label,
+            anxiety_score,
+            stress_label,
+            stress_score,
+            user: req.user._id
+        })
+        await newDass.save()
 
-    res.json({
-        depression_label,
-        depression_score,
-        anxiety_label,
-        anxiety_score,
-        stress_label,
-        stress_score
-    })
+        res.json({
+            success: true,
+            newDass
+        })
+    }
+    catch (error) {
+        next()
+    }
 }
