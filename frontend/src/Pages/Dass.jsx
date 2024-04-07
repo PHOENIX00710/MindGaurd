@@ -199,14 +199,14 @@ function Dass() {
       )}
       <div
         id="wrapper"
-        className={`min-h-screen flex flex-col gap-3 justify-center items-center ${
+        className={`min-h-screen flex flex-col gap-3 px-2 items-center ${
           openModal ? "opacity-10" : "opacity-100"
         }`}
       >
-        <h1 className="text-4xl text-blue-500 roboto-bold mb-6 ">
+        <h1 className="text-4xl text-blue-500 roboto-bold my-6 mx-28 sm:mx-auto ">
           DASS-21 Questionnaire
         </h1>
-        <main className=" min-h-96 w-1/3 shadow-2xl flex flex-col gap-y-6 justify-evenly rounded-3xl py-10 px-16">
+        <main className=" min-h-96 min-w-96 lg:w-1/3 shadow-2xl flex flex-col gap-y-6 justify-evenly rounded-3xl py-10 px-12">
           <strong
             className="self-end text-red-600 cursor-pointer"
             onClick={() => {

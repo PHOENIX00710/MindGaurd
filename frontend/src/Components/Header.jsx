@@ -18,8 +18,9 @@ function Header(props) {
             MindGuard
           </section>
         </Link>
-        <nav className="flex justify-around md:gap-x-16 items-center text-blue-2 roboto-medium md:text-lg">
+        <nav className="flex justify-around md:gap-x-12 items-center text-blue-2 roboto-medium md:text-lg">
           <Link to={"/"}>Home</Link>
+          <Link to={"/profile"}>Profile</Link>
           <Link to={"/articles"}>Articles</Link>
           <Link to={"/dass"}>DASS-42</Link>
           <Link to={"/community"}>Community</Link>
@@ -49,28 +50,37 @@ function Header(props) {
                 className="cursor-pointer"
                 onClick={() => setOpenNavbar((state) => !state)}
               />
-              <nav className="flex absolute z-10 right-3 top-16 py-6 px-10 rounded-lg shadow-xl flex-col justify-around gap-y-4 items-center roboto-medium">
+              <nav
+                className="flex absolute z-10 right-3 top-16 py-6 px-10 rounded-lg shadow-xl flex-col justify-around gap-y-4 items-center roboto-medium  text-white"
+                style={{ backgroundColor: "#18191a" }}
+              >
                 <Link
                   to={"/"}
-                  className="hover:bg-slate-400 text-slate-600 cursor-pointer py-1 px-3 rounded-lg hover:text-white"
+                  className="w-full hover:bg-gray-hover cursor-pointer py-1 px-3 rounded-lg "
                 >
                   Home
                 </Link>
                 <Link
+                  to={"/profile"}
+                  className=" w-full cursor-pointer py-1 px-3 rounded-lg hover:bg-gray-hover "
+                >
+                  Profile
+                </Link>
+                <Link
                   to={"/articles"}
-                  className="hover:bg-slate-400 text-slate-600 cursor-pointer py-1 px-3 rounded-lg hover:text-white"
+                  className=" w-full cursor-pointer py-1 px-3 rounded-lg hover:bg-gray-hover "
                 >
                   Articles
                 </Link>
                 <Link
                   to={"/dass"}
-                  className="hover:bg-slate-400 text-slate-600 cursor-pointer py-1 px-3 rounded-lg hover:text-white"
+                  className=" w-full cursor-pointer py-1 px-3 rounded-lg hover:bg-gray-hover "
                 >
                   DASS-42
                 </Link>
                 <Link
                   to={"/community"}
-                  className="hover:bg-slate-400 text-slate-600 cursor-pointer py-1 px-3 rounded-lg hover:text-white"
+                  className=" w-full cursor-pointer py-1 px-3 rounded-lg hover:bg-gray-hover "
                 >
                   Community
                 </Link>
