@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ProfileSidebar from '../Components/Profile/ProfileSidebar'
-import ProfileMain from '../Components/Profile/ProfileMain'
+import SavedArticlesPage from '../Components/SavedArticlesPage'
 import { useLocation } from 'react-router-dom'
 import AllPosts from '../Components/AllPosts'
 
@@ -19,11 +19,11 @@ function Profile() {
   // We use locaton.search in useEffect to render different components based on tabs
 
   return (
-    <div className='flex flex-col tablet:flex-row'>
+    <div className='flex flex-col lg:min-h-screen lg:flex-row'>
       <ProfileSidebar />
       <>
-        {tab === "main" && < ProfileMain />}
-        {tab === "savedArticles" && <AllPosts />}
+        {tab === "savedArticles" && < SavedArticlesPage />}
+        {tab === "allPosts" && <AllPosts />}
       </>
     </div>
   )
