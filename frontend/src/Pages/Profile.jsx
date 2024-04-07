@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ProfileSidebar from '../Components/Profile/ProfileSidebar'
 import SavedArticlesPage from '../Components/SavedArticlesPage'
 import { useLocation } from 'react-router-dom'
-import AllPosts from '../Components/AllPosts'
+import MyPosts from '../Components/Posts/MyPosts'
 
 function Profile() {
 
@@ -23,7 +23,7 @@ function Profile() {
       <ProfileSidebar />
       <>
         {tab === "savedArticles" && < SavedArticlesPage />}
-        {tab === "allPosts" && <AllPosts />}
+        {tab === "myPosts" && <MyPosts />}
       </>
     </div>
   )
