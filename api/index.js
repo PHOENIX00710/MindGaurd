@@ -4,6 +4,8 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import articleroutes from './routes/articles.router.js'
+import dassRoutes from './routes/dass.router.js'
+import userRoutes from './routes/user.routes.js'
 
 dotenv.config();
 
@@ -16,15 +18,17 @@ await mongoose.connect(process.env.MongoURI)
     .then((val) => {
         console.log("Connected to MongoDb");
     })
-    .catch((e) => console.log("Could not connect to database",e))
+    .catch((e) => console.log("Could not connect to database", e))
 
 const app = express();
-app.use(express.json()) 
+app.use(express.json())
 app.use(cors(corsOptions))
 app.use(cookieParser())
 
 //Handle Routes
 app.use("/api/v1/articles", articleroutes)
+app.use("/api/v1/dass", dassRoutes)
+app.use("/api/v1/user", userRoutes)
 
 // Error handling  middleware should be after all routes
 app.use((err, req, res, next) => {
