@@ -13,51 +13,6 @@ import Article from "../Components/Article/Article";
 import { motion } from "framer-motion";
 import { ClipLoader, PacmanLoader } from "react-spinners";
 
-// const articles2 = [
-//   {
-//     _id: 1,
-//     title: "Title 1",
-//     overview:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Error corporis, rerum, voluptatibus perferendis non, magni quisquam iste dolores eaque ipsa iure nemo. Suscipit nisi quidem neque adipisci ipsum, at culpa?",
-//     img: "https://www.shutterstock.com/shutterstock/photos/300112205/display_1500/stock-vector-mental-health-disorders-and-work-related-stress-anxiety-and-depression-symptoms-icons-set-abstract-300112205.jpg",
-//   },
-//   {
-//     _id: 2,
-//     title: "Title 2",
-//     overview:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Error corporis, rerum, voluptatibus perferendis non, magni quisquam iste dolores eaque ipsa iure nemo. Suscipit nisi quidem neque adipisci ipsum, at culpa?",
-//     img: "https://www.shutterstock.com/shutterstock/photos/300112205/display_1500/stock-vector-mental-health-disorders-and-work-related-stress-anxiety-and-depression-symptoms-icons-set-abstract-300112205.jpg",
-//   },
-//   {
-//     _id: 3,
-//     title: "Title 3",
-//     overview:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Error corporis, rerum, voluptatibus perferendis non, magni quisquam iste dolores eaque ipsa iure nemo. Suscipit nisi quidem neque adipisci ipsum, at culpa?",
-//     img: "https://www.shutterstock.com/shutterstock/photos/300112205/display_1500/stock-vector-mental-health-disorders-and-work-related-stress-anxiety-and-depression-symptoms-icons-set-abstract-300112205.jpg",
-//   },
-//   {
-//     _id: 4,
-//     title: "Title 4",
-//     overview:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Error corporis, rerum, voluptatibus perferendis non, magni quisquam iste dolores eaque ipsa iure nemo. Suscipit nisi quidem neque adipisci ipsum, at culpa?",
-//     img: "https://www.shutterstock.com/shutterstock/photos/300112205/display_1500/stock-vector-mental-health-disorders-and-work-related-stress-anxiety-and-depression-symptoms-icons-set-abstract-300112205.jpg",
-//   },
-//   {
-//     _id: 5,
-//     title: "Title 5",
-//     overview:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Error corporis, rerum, voluptatibus perferendis non, magni quisquam iste dolores eaque ipsa iure nemo. Suscipit nisi quidem neque adipisci ipsum, at culpa?",
-//     img: "https://www.shutterstock.com/shutterstock/photos/300112205/display_1500/stock-vector-mental-health-disorders-and-work-related-stress-anxiety-and-depression-symptoms-icons-set-abstract-300112205.jpg",
-//   },
-//   {
-//     _id: 6,
-//     title: "Title 6",
-//     overview:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Error corporis, rerum, voluptatibus perferendis non, magni quisquam iste dolores eaque ipsa iure nemo. Suscipit nisi quidem neque adipisci ipsum, at culpa?",
-//     img: "https://www.shutterstock.com/shutterstock/photos/300112205/display_1500/stock-vector-mental-health-disorders-and-work-related-stress-anxiety-and-depression-symptoms-icons-set-abstract-300112205.jpg",
-//   },
-// ];
-
 function Articles() {
   const [category, setCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState(null);
@@ -84,7 +39,6 @@ function Articles() {
         );
         const data = await req.json();
         if (data.success === false) return toast.error(data.message);
-        console.log(data);
         setArticles(data.data);
       } catch (e) {
         return toast.error(data.message);
@@ -95,12 +49,51 @@ function Articles() {
   }, []);
 
   useEffect(() => {
-    const printData = () => console.log(articles);
-    printData();
-  }, [articles]);
+    const fetchArticles = async () => {
+      try {
+        setLoading(true);
+        const req = await fetch(
+          `http://localhost:3000/api/v1/articles/getArticles?category=${category.toLowerCase()}`,
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await req.json();
+        if (data.success === false) return toast.error(data.message);
+        setArticles(data.data);
+      } catch (e) {
+        return toast.error(e.message);
+      }
+      setLoading(false);
+    };
+    if (category) fetchArticles();
+  }, [category]);
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
+    try {
+      setLoading(true);
+      const req = await fetch(
+        `http://localhost:3000/api/v1/articles/getArticles?searchTerm=${searchTerm.toLowerCase()}`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await req.json();
+      if (data.success === false) return toast.error(data.message);
+      setArticles(data.data);
+    } catch (e) {
+      return toast.error(e.message);
+    }
+    setLoading(false);
   };
 
   if (loading) {
@@ -130,7 +123,10 @@ function Articles() {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <FaSearchengin className="cursor-pointer text-lg" />
+                <FaSearchengin
+                  className="cursor-pointer text-lg"
+                  onClick={handleSearch}
+                />
               </InputAdornment>
             ),
           }}
@@ -183,8 +179,8 @@ function Articles() {
             variant="outlined"
           >
             <MenuItem value={"Depression"}>Depression</MenuItem>
-            <MenuItem value={"Stress"}>Stress</MenuItem>
             <MenuItem value={"Anxiety"}>Anxiety</MenuItem>
+            <MenuItem value={""}>All</MenuItem>
           </Select>
         </FormControl>
       </section>

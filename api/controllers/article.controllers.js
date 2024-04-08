@@ -1,9 +1,9 @@
 import articleModel from "../models/articleSchema.js"
 import savedArticleModel from "../models/savedArticleSchema.js";
 import { generateError } from "../utils/customErrorGenerator.js";
+import mongoose from 'mongoose';
 
 export const getAllArticles = async (req, res, next) => {
-    console.log("Hey Fetching");
     const start = parseInt(req.query.start) || 0;
     const limit = parseInt(req.query.limit) || 12;
     const sortDirection = req.query.sortBy === "asc" ? 1 : -1;
@@ -94,3 +94,25 @@ export const switchSavedStatus = async (req, res, next) => {
         next(generateError(error.errorCode, error.errorMessage))
     }
 }
+
+export const getArticle = async (req, res, next) => {
+    const id = req.params.id;
+    // Check if the ID is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ success: false, message: "Invalid article ID format." });
+    }
+    try {
+        const article = await articleModel.findById(id);
+        if (!article) {
+            return res.status(404).json({ success: false, message: "No Article Found" });
+        }
+        res.status(200).json({
+            success: true,
+            article
+        });
+    } catch (e) {
+        console.error(e);
+        next(e); // Make sure to pass the error to your error handling middleware
+    }
+}
+
