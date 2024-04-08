@@ -6,6 +6,8 @@ import cors from 'cors'
 import articleroutes from './routes/articles.router.js'
 import dassRoutes from './routes/dass.router.js'
 import userRoutes from './routes/user.routes.js'
+import postRoutes from './routes/post.router.js'
+import commentRoutes from './routes/comment.router.js'
 
 dotenv.config();
 
@@ -29,6 +31,8 @@ app.use(cookieParser())
 app.use("/api/v1/articles", articleroutes)
 app.use("/api/v1/dass", dassRoutes)
 app.use("/api/v1/user", userRoutes)
+app.use("/api/v1/posts", postRoutes)
+app.use("/api/v1/reactions", commentRoutes)
 
 // Error handling  middleware should be after all routes
 app.use((err, req, res, next) => {

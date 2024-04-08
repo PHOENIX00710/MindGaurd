@@ -1,11 +1,14 @@
 import mongoose, { Mongoose } from 'mongoose'
 
 const commentSchema = new mongoose.Schema({
-    user:
-    {
+    user: {
         type: mongoose.Types.ObjectId,
-        ref: "User",
+        ref: 'User',
         required: true,
+    },
+    author: {
+        type: String,
+        required: true
     },
     post: {
         type: mongoose.Types.ObjectId,
@@ -24,5 +27,5 @@ const commentSchema = new mongoose.Schema({
 
 }, { timestamps: true })
 
-const commentModel = mongoose.model('User', commentSchema)
+const commentModel = mongoose.model('Comment', commentSchema)
 export default commentModel
