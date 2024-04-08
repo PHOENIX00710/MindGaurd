@@ -69,8 +69,11 @@ const stories = [
 ]
 
 function Community() {
+
     return (
-        <main className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center p-10 gap-6'>
+        <div className='min-h-screen px-20 py-10 flex flex-col justify-center items-center'>
+            <h1 className='roboto-bold text-4xl'>Today’s Top Discussions</h1>
+            <main className='grid grid-cols-1 lg:grid-cols-2 place-items-center p-10 gap-9'>
             {
                 stories.map((story) => (
                     <motion.div
@@ -83,6 +86,7 @@ function Community() {
                 ))
             }
         </main>
+        </div>
     )
 }
 

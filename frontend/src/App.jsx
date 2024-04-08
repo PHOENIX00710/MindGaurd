@@ -11,8 +11,9 @@ import Articles from "./Pages/Articles";
 import Dass from "./Pages/Dass";
 import Community from "./Pages/Community";
 import Profile from "./Pages/Profile";
-import { store,persistor } from "./Redux/user.store";
-import { Provider } from "react-redux"
+import { store, persistor } from "./Redux/user.store";
+import { Provider } from "react-redux";
+import IndividualPost from "./Pages/IndividualPost";
 
 function App() {
   const [openNavbar, setOpenNavbar] = useState(false);
@@ -35,6 +36,7 @@ function App() {
             <Route path="/dass" element={<Dass />} />
             <Route path="/community" element={<Community />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/indi" element={<IndividualPost />} />
           </Routes>
           <Footer />
         </Router>
