@@ -14,6 +14,7 @@ import Profile from "./Pages/Profile";
 import { store, persistor } from "./Redux/user.store";
 import { Provider } from "react-redux";
 import IndividualPost from "./Pages/IndividualPost";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [openNavbar, setOpenNavbar] = useState(false);
@@ -39,6 +40,7 @@ function App() {
             <Route path="/indi" element={<IndividualPost />} />
           </Routes>
           <Footer />
+          <Toaster />
         </Router>
       </PersistGate>
     </Provider>

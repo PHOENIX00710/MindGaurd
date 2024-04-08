@@ -8,9 +8,7 @@ export const genTokenAndSetCookie = (id, res) => {
         const token = jwt.sign(id.toString(), process.env.JWT_KEY)
         res
             .cookie("jwt", token, {
-                httpOnly: true, maxAge: 1 * 60 * 60 * 1000,//ms
-                httpOnly: true,
-                sameSite: 'None',
+                maxAge: 1 * 60 * 60 * 1000,//ms
             })
         return
     } catch (error) {

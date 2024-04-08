@@ -3,6 +3,7 @@ import savedArticleModel from "../models/savedArticleSchema.js";
 import { generateError } from "../utils/customErrorGenerator.js";
 
 export const getAllArticles = async (req, res, next) => {
+    console.log("Hey Fetching");
     const start = parseInt(req.query.start) || 0;
     const limit = parseInt(req.query.limit) || 12;
     const sortDirection = req.query.sortBy === "asc" ? 1 : -1;

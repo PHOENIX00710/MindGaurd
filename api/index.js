@@ -11,11 +11,6 @@ import commentRoutes from './routes/comment.router.js'
 
 dotenv.config();
 
-// Cors set-up
-var corsOptions = {
-    origin: 'http://localhost:5173',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
 await mongoose.connect(process.env.MongoURI)
     .then((val) => {
         console.log("Connected to MongoDb");
@@ -24,7 +19,10 @@ await mongoose.connect(process.env.MongoURI)
 
 const app = express();
 app.use(express.json())
-app.use(cors(corsOptions))
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+}))
 app.use(cookieParser())
 
 //Handle Routes

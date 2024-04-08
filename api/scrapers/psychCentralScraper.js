@@ -17,7 +17,7 @@ export const psychCentralScraper = async (req, res) => {
                     const title = e.querySelector('.css-1i8xvi9')?.textContent || 'No title';
                     const content = e.querySelector('.css-onvglr')?.textContent || 'No content';
                     const link = e.querySelector('.css-1i8xvi9')?.href || 'No link';
-                    const img = e.querySelector('.css-10vopkp')?.src || 'https://media.gettyimages.com/id/632495542/photo/las-vegas-nv-adult-film-actress-lana-rhoades-attends-the-2017-adult-video-news-awards-at-the.jpg?s=612x612&w=gi&k=20&c=j9toULaCbKoc92QIfrZ2tyOfuxgzVAXoChceawOMWN0=';
+                    const img = e.querySelector('.css-10vopkp')?.src || 'https://media.istockphoto.com/id/1337766466/photo/man-suffering-depression-and-feeling-negative-emotions.jpg?s=612x612&w=0&k=20&c=6XL3vxDQ-8v5zgVaGqvafNl8cFGT4SCm2lki4rXawYc=';
                     return { title, content, link, img, category };
                 });
             }, category); // Note: Passing category as an argument to page.evaluate()

@@ -4,6 +4,7 @@ import userModel from '../models/userSchema.js'
 const authenticate = async (req, res, next) => {
     try {
         const token = req.cookies.jwt;
+        console.log("Token: ", token, " Req: ", req.cookies);
         let userId = jwt.verify(token, process.env.JWT_KEY);
         const user = await userModel.findById(userId).select('-password')
         if (user) {

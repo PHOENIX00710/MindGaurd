@@ -51,12 +51,11 @@ function About(props) {
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1.5 }}
+          className="text-sm md:text-lg space-x-0 roboto-regular-italic"
         >
-          <p className="text-sm md:text-lg space-x-0 roboto-regular-italic">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis
-            possimus tempore quo, itaque voluptatum doloremque. Distinctio at
-            sapiente sint facilis alias maiores. Harum, quia quis!
-          </p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis
+          possimus tempore quo, itaque voluptatum doloremque. Distinctio at
+          sapiente sint facilis alias maiores. Harum, quia quis!
         </motion.p>
         <button className="btn " onClick={handleSubmit}>
           Get Articles

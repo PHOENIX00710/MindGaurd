@@ -1,14 +1,37 @@
-import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HiBarsArrowDown } from "react-icons/hi2";
 import { HiBarsArrowUp } from "react-icons/hi2";
+import toast from "react-hot-toast";
+import { signOutSuccess } from "../features/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@nextui-org/react";
 
 function Header(props) {
   const [openNavbar, setOpenNavbar] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.userDetails);
+
   useEffect(() => {
     props.navbarHandler(openNavbar);
   }, [openNavbar]);
+
+  const handleSignout = async (e) => {
+    let url = "http://localhost:3000/api/v1/user/signout";
+    const req = await fetch(url, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await req.json();
+    if (data.success === false) return toast.error(data.message);
+    dispatch(signOutSuccess());
+    toast.success(data.message);
+    navigate("/");
+  };
 
   return (
     <>
@@ -20,14 +43,20 @@ function Header(props) {
         </Link>
         <nav className="flex justify-around md:gap-x-12 items-center text-blue-2 roboto-medium md:text-lg">
           <Link to={"/"}>Home</Link>
-          <Link to={"/profile"}>Profile</Link>
+          <Link to={"/profile?tab=savedArticles"}>Profile</Link>
           <Link to={"/articles"}>Articles</Link>
           <Link to={"/dass"}>DASS-42</Link>
           <Link to={"/community"}>Community</Link>
         </nav>
-        <Link to={"/signin"}>
-          <Button variant="contained">Sign In</Button>
-        </Link>
+        {user ? (
+          <Button onClick={handleSignout} color="warning" variant="shadow">
+            Signout
+          </Button>
+        ) : (
+          <Button variant="shadow" color="primary" onClick={() => navigate("/signin")}>
+            Sign In
+          </Button>
+        )}
       </header>
 
       {/* Mobile View */}
@@ -61,7 +90,7 @@ function Header(props) {
                   Home
                 </Link>
                 <Link
-                  to={"/profile"}
+                  to={"/profile?tab=savedArticles"}
                   className=" w-full cursor-pointer py-1 px-3 rounded-lg hover:bg-gray-hover "
                 >
                   Profile
